@@ -122,6 +122,8 @@ function GetPluginURL(linkUrl)
   if(videoparam == '' && playlistparam == '') return 0;
   
   var url = pluginurl+playlistparam+videoparam;
+
+  console.log("[send to kodi] url: " + url);
   return url;
 }
 
@@ -139,7 +141,16 @@ function getSavedOptions(callback) {
 function SubmitForm(reqval) {
   getSavedOptions(function() {
     var url = "http://" + savedOptions.hostname + "/jsonrpc";
-    $.get(url, {request: reqval});
+    jQuery.ajax({
+       'type': 'POST',
+       'url': url,
+       'contentType': 'application/json',
+       'data': reqval,
+       'dataType': 'json',
+       'success': (data) => {
+        console.log("request done: ", data);
+	}
+    });
   });
 }
 
